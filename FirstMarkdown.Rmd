@@ -5,7 +5,19 @@ date: "11/2/2020"
 output: github_document
 ---
 
-This is an english sentence
+Install needed libraries
+```{r}
+# Load necessary data packaages
+  library(ggpubr)
+  library(ggplot2)
+  library(dataRetrieval)
+  library(openxlsx)
+  library(dplyr)
+  library(lubridate)
+  # Magick is only needed if want to open and view png of plots in R studio.
+  library(magick)
+```
+
 
 ```{r}
 ### This is an R chunk
@@ -14,5 +26,15 @@ This is an english sentence
   county <- c("12086")
   agency<-"USGS"
   pCode1
+```
+
+```{r}
+# Create a data frame with sites that have both d2H and d18O data and create a list of the site numbers
+  Sitesd2H <- whatNWISsites(countyCd=county,parameterCd=pCode1,agencyCd=agency)
+  Sitesd18O<- whatNWISsites(countyCd=county,parameterCd=pCode2,agencyCd=agency)
+  Sites<-rbind(Sitesd2H,Sitesd18O)%>%
+    distinct(site_no, .keep_all=TRUE)%>%
+        select(site_no)
+  SiteList<-(Sites$site_no)
 ```
 
